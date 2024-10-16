@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000'; // This matches your API running on port 8000
+// Use the BACKEND environment variable for the API base URL
+const API_BASE_URL = process.env.BACKEND || 'http://localhost:8000'; // Fallback to localhost for local development
 
 const api = axios.create({
   baseURL: API_BASE_URL,

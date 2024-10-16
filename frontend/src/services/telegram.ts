@@ -28,7 +28,7 @@ export const getTelegramId = (): string => {
   }
   if (process.env.NODE_ENV === 'development') {
     console.warn('Using mock Telegram ID for development');
-    return 'mock_user_id_123456789';
+    return;
   }
   throw new Error('Telegram user ID not available');
 };
