@@ -78,7 +78,7 @@ async def startup_event():
     scheduler.start()
     
     # Start the Telegram bot
-    asyncio.create_task(run_telegram_bot())
+    asyncio.create_task(run_telegram_bot(app))
 
 @app.get("/")
 async def root():
