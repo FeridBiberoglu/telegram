@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+MONGODB_URL = os.getenv("MONGODB_URL")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "profitsniffer")
+
 class Config:
     MONGODB_URL = MONGODB_URL
     MONGODB_DB_NAME = MONGODB_DB_NAME
