@@ -369,4 +369,4 @@ async def get_token(token_id: str):
 if __name__ == "__main__":
     import uvicorn
     logger.info("Starting the ProfitSniffer API...")
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
