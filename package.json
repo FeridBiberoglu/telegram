@@ -1,7 +1,7 @@
 {
 	"scripts": {
 	  "start": "cd app && uvicorn main:app --host 0.0.0.0 --port $PORT",
-	  "heroku-postbuild": "cd frontend && npm install && npm run build"
+	  "heroku-postbuild": "cd frontend && npm install && npm run build && mv dist ../app/static"
 	},
 	"engines": {
 	  "node": "14.x"
