@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProfitSniffer</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+      function initTelegramWebApp() {
+        if (window.Telegram && window.Telegram.WebApp) {
+          window.Telegram.WebApp.ready();
+          return window.Telegram.WebApp.initDataUnsafe;
+        }
+        return null;
+      }
+      function sendTelegramData(data) {
+        if (window.Telegram && window.Telegram.WebApp) {
+          window.Telegram.WebApp.sendData(data);
+        }
+      }
+      function setMainButton(text, isVisible) {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.MainButton) {
+          window.Telegram.WebApp.MainButton.setText(text);
+          if (isVisible) {
+            window.Telegram.WebApp.MainButton.show();
+          } else {
+            window.Telegram.WebApp.MainButton.hide();
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
