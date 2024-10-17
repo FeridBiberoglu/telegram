@@ -64,7 +64,7 @@ async def get_dexscreener_links(session, url=None):
 
     if not url:
         url = DEFAULT_URL
-
+    logger.info(f"Fetching links from {url}")
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
