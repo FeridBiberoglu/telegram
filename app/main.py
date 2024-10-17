@@ -36,7 +36,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update this with your frontend URL in production
+    allow_origins=["https://elegant-duckanoo-d8e6c0.netlify.app", "http://localhost:3000"],  # Update this with your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -367,6 +367,6 @@ async def get_token(token_id: str):
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 if __name__ == "__main__":
-    import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Use the PORT environment variable
     logger.info("Starting the ProfitSniffer API...")
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
