@@ -1,5 +1,5 @@
 import aiohttp
-from config import config
+from app.config import config
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
