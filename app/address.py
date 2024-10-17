@@ -89,13 +89,16 @@ async def get_dexscreener_links(session, url=None):
     for attempt in range(retries):
         try:
             await asyncio.sleep(2)
+            logger.info(f"Attempt {attempt + 1} to fetch links")
             async with session.get(url, headers=headers, cookies=cookies, timeout=10) as response:
                 logger.info(f"Response status code: {response.status}")
                 if response.status == 200:
                     content = await response.text()
+                    logger.info(f"Response content length: {len(content)}")
                     soup = BeautifulSoup(content, 'html.parser')
-                    logger.info(f"Soup content: {soup}")
+                    logger.info(f"BeautifulSoup object created")
                     rows = soup.find_all('a', class_='ds-dex-table-row ds-dex-table-row-new')
+                    logger.info(f"Found {len(rows)} rows with class 'ds-dex-table-row ds-dex-table-row-new'")
                     
                     pair_addresses = []
                     for row in rows[:30]:
@@ -104,6 +107,7 @@ async def get_dexscreener_links(session, url=None):
                             pair_address = href.split('/')[-1]
                             pair_addresses.append(pair_address)
                     
+                    logger.info(f"Extracted {len(pair_addresses)} pair addresses")
                     return pair_addresses
                 elif response.status == 403:
                     logger.info("403 error, getting new cf_clearance")
@@ -111,20 +115,30 @@ async def get_dexscreener_links(session, url=None):
                     update_global_cookies_and_user_agent(new_cookie, new_user_agent)
                     headers['User-Agent'] = user_agent
                     cookies['cf_clearance'] = cf_clearance
+                    logger.info(f"Updated cf_clearance: {cf_clearance[:10]}... (truncated)")
+                    logger.info(f"Updated user_agent: {user_agent}")
                     continue
                 else:
+                    logger.error(f"Unexpected status code: {response.status}")
                     if attempt < retries - 1:
                         sleep_time = backoff_factor ** attempt
+                        logger.info(f"Sleeping for {sleep_time} seconds before next attempt")
                         await asyncio.sleep(sleep_time)
                     else:
+                        logger.error("All attempts failed")
                         return []
         except Exception as e:
+            logger.error(f"Error in get_dexscreener_links: {str(e)}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
             if attempt < retries - 1:
                 sleep_time = backoff_factor ** attempt
+                logger.info(f"Sleeping for {sleep_time} seconds before next attempt")
                 await asyncio.sleep(sleep_time)
             else:
+                logger.error("All attempts failed due to exceptions")
                 return []
 
+    logger.error("All attempts to get dexscreener links failed")
     return []
 
 async def get_token_info(session, pair_addresses):
