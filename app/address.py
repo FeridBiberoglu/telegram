@@ -7,6 +7,8 @@ import json
 import os
 from aiohttp import ClientError
 import traceback
+import brotli
+import gzip
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', stream=sys.stdout)
 logger = logging.getLogger(__name__)
@@ -91,8 +93,25 @@ async def get_dexscreener_links(session, url=None):
             await asyncio.sleep(2)
             async with session.get(url, headers=headers, cookies=cookies, timeout=10) as response:
                 if response.status == 200:
-                    content = await response.text()
-                    soup = BeautifulSoup(content, 'html.parser')
+                    content_encoding = response.headers.get('Content-Encoding', '').lower()
+                    content = await response.read()
+
+                    if 'br' in content_encoding:
+                        try:
+                            decoded_content = brotli.decompress(content)
+                        except Exception as e:
+                            logger.error(f"Error decompressing Brotli content: {e}")
+                            decoded_content = content  # Fallback to raw content
+                    elif 'gzip' in content_encoding:
+                        try:
+                            decoded_content = gzip.decompress(content)
+                        except Exception as e:
+                            logger.error(f"Error decompressing gzip content: {e}")
+                            decoded_content = content  # Fallback to raw content
+                    else:
+                        decoded_content = content
+
+                    soup = BeautifulSoup(decoded_content, 'html.parser')
                     rows = soup.find_all('a', class_='ds-dex-table-row ds-dex-table-row-new')
                     
                     pair_addresses = []
@@ -117,6 +136,7 @@ async def get_dexscreener_links(session, url=None):
                     else:
                         return []
         except Exception as e:
+            logger.error(f"Error in get_dexscreener_links: {e}")
             if attempt < retries - 1:
                 sleep_time = backoff_factor ** attempt
                 await asyncio.sleep(sleep_time)
