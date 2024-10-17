@@ -98,8 +98,17 @@ async def get_dexscreener_links(session, url=None):
                 logger.info(f"Response status code: {response.status}")
                 if response.status == 200:
                     content = await response.read()
-                    if response.headers.get('Content-Encoding') == 'br':
+                    content_encoding = response.headers.get('Content-Encoding', '').lower()
+                    logger.info(f"Content-Encoding: {content_encoding}")
+                    
+                    if 'br' in content_encoding:
+                        logger.info("Decompressing Brotli content")
                         content = brotli.decompress(content)
+                    elif 'gzip' in content_encoding:
+                        logger.info("Decompressing gzip content")
+                        import gzip
+                        content = gzip.decompress(content)
+                    
                     content = content.decode('utf-8')
                     logger.info(f"Response content length: {len(content)}")
                     soup = BeautifulSoup(content, 'html.parser')
