@@ -94,6 +94,7 @@ async def get_dexscreener_links(session, url=None):
                 if response.status == 200:
                     content = await response.text()
                     soup = BeautifulSoup(content, 'html.parser')
+                    logger.info(f"Soup content: {soup}")
                     rows = soup.find_all('a', class_='ds-dex-table-row ds-dex-table-row-new')
                     
                     pair_addresses = []
