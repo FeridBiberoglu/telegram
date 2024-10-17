@@ -9,15 +9,15 @@ from bson import ObjectId
 from fastapi import FastAPI, HTTPException, Body
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
-from app.address import get_dexscreener_data, DEFAULT_URL
-from app.config import config
+from address import get_dexscreener_data, DEFAULT_URL
+from config import config
 from fastapi.middleware.cors import CORSMiddleware
-from app.url import generate_dexscreener_url
+from url import generate_dexscreener_url
 import random 
 import httpx
 import sys
 
-from app.telegram_bot import send_telegram_message, run_telegram_bot
+from telegram_bot import send_telegram_message, run_telegram_bot
 
 ALERT_MESSAGES = [
     "🎯 ProfitSniffer Bullseye: {count} new target(s) acquired. Aim for profits!",
@@ -314,6 +314,7 @@ async def scheduled_fetch_tokens():
     try:
         users = await users_collection.find().to_list(length=None)
         total_users = len(users)
+        logger.info(f"Total users: {total_users}")
 
         users_per_minute = 300
         batch_size = 30
@@ -323,7 +324,6 @@ async def scheduled_fetch_tokens():
             batch = users[i:i + batch_size]
             logger.info(f"Processing batch {i//batch_size + 1} of {num_batches}")
             
-            # Add a timeout to the fetch_tokens_safe function
             async def fetch_tokens_safe_with_timeout(telegram_id: str):
                 try:
                     return await asyncio.wait_for(fetch_tokens_safe(telegram_id), timeout=50)  # 50 seconds timeout
@@ -337,6 +337,8 @@ async def scheduled_fetch_tokens():
             for user, result in zip(batch, results):
                 if isinstance(result, Exception):
                     logger.error(f"Error fetching tokens for user {user['telegram_id']}: {str(result)}")
+                else:
+                    logger.info(f"Fetched tokens for user {user['telegram_id']}: {result}")
             
             if i + batch_size < min(total_users, users_per_minute):
                 await asyncio.sleep(60 / num_batches)

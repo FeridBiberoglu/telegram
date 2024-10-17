@@ -7,7 +7,7 @@ import json
 import os
 from aiohttp import ClientError
 import traceback
-from app.config import config
+from config import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', stream=sys.stdout)
 logger = logging.getLogger(__name__)
@@ -90,6 +90,7 @@ async def get_dexscreener_links(session, url=None):
         try:
             await asyncio.sleep(2)
             async with session.get(url, headers=headers, cookies=cookies, timeout=10) as response:
+                logger.info(f"Response status code: {response.status}")
                 if response.status == 200:
                     content = await response.text()
                     soup = BeautifulSoup(content, 'html.parser')
