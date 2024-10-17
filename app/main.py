@@ -9,15 +9,15 @@ from bson import ObjectId
 from fastapi import FastAPI, HTTPException, Body
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
-from address import get_dexscreener_data, DEFAULT_URL
-from config import config
+from app.address import get_dexscreener_data, DEFAULT_URL
+from app.config import config
 from fastapi.middleware.cors import CORSMiddleware
-from url import generate_dexscreener_url
+from app.url import generate_dexscreener_url
 import random 
 import httpx
 import sys
 
-from telegram_bot import send_telegram_message, run_telegram_bot
+from app.telegram_bot import send_telegram_message, run_telegram_bot
 
 ALERT_MESSAGES = [
     "🎯 ProfitSniffer Bullseye: {count} new target(s) acquired. Aim for profits!",
@@ -36,7 +36,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://elegant-duckanoo-d8e6c0.netlify.app", "http://localhost:3000"],  # Update this with your frontend URL in production
+    allow_origins=[config.FRONTEND_URL, "http://localhost:3000"],  # Update this with your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -78,7 +78,7 @@ async def startup_event():
     scheduler.start()
     
     # Start the Telegram bot
-    asyncio.create_task(run_telegram_bot(app))
+    asyncio.create_task(run_telegram_bot())
 
 @app.get("/")
 async def root():
