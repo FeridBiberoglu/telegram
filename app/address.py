@@ -7,7 +7,7 @@ import json
 import os
 from aiohttp import ClientError
 import traceback
-from app.config import config
+from config import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', stream=sys.stdout)
 logger = logging.getLogger(__name__)
