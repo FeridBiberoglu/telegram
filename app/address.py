@@ -8,6 +8,7 @@ import os
 from aiohttp import ClientError
 import traceback
 from app.config import config
+import brotli
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', stream=sys.stdout)
 logger = logging.getLogger(__name__)
@@ -65,6 +66,9 @@ async def get_dexscreener_links(session, url=None):
     if not url:
         url = DEFAULT_URL
     logger.info(f"Fetching links from {url}")
+    logger.info(f"Current cf_clearance: {cf_clearance[:10]}... (truncated)")
+    logger.info(f"Current user_agent: {user_agent}")
+
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -93,7 +97,10 @@ async def get_dexscreener_links(session, url=None):
             async with session.get(url, headers=headers, cookies=cookies, timeout=10) as response:
                 logger.info(f"Response status code: {response.status}")
                 if response.status == 200:
-                    content = await response.text()
+                    content = await response.read()
+                    if response.headers.get('Content-Encoding') == 'br':
+                        content = brotli.decompress(content)
+                    content = content.decode('utf-8')
                     logger.info(f"Response content length: {len(content)}")
                     soup = BeautifulSoup(content, 'html.parser')
                     logger.info(f"BeautifulSoup object created")
