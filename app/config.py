@@ -17,8 +17,8 @@
 class Config:
     MONGODB_DB_NAME = "profitsniffer"
     MONGODB_URL = "mongodb+srv://feridbiberoglu88:Amsterdam1@profitsniffer.vxoqb.mongodb.net/"
-    TELEGRAM_BOT_TOKEN = "7824046971:AAGGdnb1V-0SVau6TRAdCsnkw0_hQd7gl9c"
+    TELEGRAM_BOT_TOKEN = "8109514552:AAFMcFuixaTgBHlFdY9jU-rWy_oBF7mdcNU"
     FRONTEND_URL = "https://elegant-duckanoo-d8e6c0.netlify.app"
-    SCRAPER_URL = "http://host.docker.internal:3000/cf-clearance-scraper"
+    SCRAPER_URL = "https://cfclearance-231e275bd969.herokuapp.com/cf-clearance-scraper"
 
 config = Config()
