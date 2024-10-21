@@ -15,7 +15,7 @@ from app.url import generate_dexscreener_url
 import random 
 import httpx
 import sys
-
+from fastapi.middleware.cors import CORSMiddleware  # Add this import
 from app.telegram_bot import send_telegram_message, run_telegram_bot
 
 ALERT_MESSAGES = [
