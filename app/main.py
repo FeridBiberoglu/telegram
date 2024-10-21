@@ -370,6 +370,7 @@ async def get_token(token_id: str):
 app.include_router(telegram_router)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Use the PORT environment variable
+    port = int(os.environ.get("PORT", 8000))
     logger.info("Starting the ProfitSniffer API...")
+    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
