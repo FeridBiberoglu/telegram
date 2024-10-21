@@ -16,7 +16,7 @@ import random
 import httpx
 import sys
 from fastapi.middleware.cors import CORSMiddleware  # Add this import
-from app.telegram_bot import send_telegram_message, run_telegram_bot
+from app.telegram_bot import router as telegram_router
 
 ALERT_MESSAGES = [
     "🎯 ProfitSniffer Bullseye: {count} new target(s) acquired. Aim for profits!",
@@ -366,6 +366,9 @@ async def get_token(token_id: str):
     except Exception as e:
         logger.error(f"Error in get_token: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+# Include the Telegram router
+app.include_router(telegram_router)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))  # Use the PORT environment variable

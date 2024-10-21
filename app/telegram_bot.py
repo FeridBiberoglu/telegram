@@ -2,14 +2,13 @@ import aiohttp
 from app.config import config
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
+from fastapi import APIRouter, Request
+
+router = APIRouter()
 
 async def send_telegram_message(chat_id: str, message: str):
-    bot_token = config.TELEGRAM_BOT_TOKEN
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-    
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, json={'chat_id': chat_id, 'text': message}) as response:
-            return await response.json()
+    application = await setup_telegram_bot()
+    await application.bot.send_message(chat_id=chat_id, text=message)
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_message = (
@@ -22,10 +21,22 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text(welcome_message)
 
-def setup_telegram_bot():
+async def setup_telegram_bot():
     application = Application.builder().token(config.TELEGRAM_BOT_TOKEN).build()
     application.add_handler(CommandHandler("start", start_command))
+    
+    # Set the webhook URL
+    webhook_url = f"{config.BACKEND_URL}/telegram-webhook"
+    await application.bot.set_webhook(webhook_url)
+    
     return application
+
+@router.post("/telegram-webhook")
+async def telegram_webhook(request: Request):
+    application = await setup_telegram_bot()
+    update = Update.de_json(await request.json(), application.bot)
+    await application.process_update(update)
+    return {"status": "ok"}
 
 async def run_telegram_bot():
     application = setup_telegram_bot()
