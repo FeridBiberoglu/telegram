@@ -11,7 +11,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
 from app.address import get_dexscreener_data, DEFAULT_URL
 from app.config import config
-from fastapi.middleware.cors import CORSMiddleware
 from app.url import generate_dexscreener_url
 import random 
 import httpx
