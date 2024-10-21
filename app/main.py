@@ -15,8 +15,8 @@ from app.url import generate_dexscreener_url
 import random 
 import httpx
 import sys
-from fastapi.middleware.cors import CORSMiddleware  # Add this import
-from app.telegram_bot import router as telegram_router
+from fastapi.middleware.cors import CORSMiddleware
+from app.telegram_bot import router as telegram_router, send_telegram_message
 
 ALERT_MESSAGES = [
     "🎯 ProfitSniffer Bullseye: {count} new target(s) acquired. Aim for profits!",
@@ -76,8 +76,7 @@ async def startup_event():
     scheduler.add_job(scheduled_fetch_tokens, IntervalTrigger(minutes=1), max_instances=1)
     scheduler.start()
     
-    # Start the Telegram bot
-    asyncio.create_task(run_telegram_bot())
+    # We don't need to start the Telegram bot here anymore as we're using webhooks
 
 @app.get("/")
 async def root():
