@@ -94,8 +94,8 @@ async def get_dexscreener_links(session, url=None):
             await asyncio.sleep(2)
             logger.info(f"Attempt {attempt + 1} to fetch links")
             async with session.get(url, headers=headers, cookies=cookies, timeout=10) as response:
+                print(headers)
                 logger.info(f"Response status code: {response.status}")
-                logger.info(f"Response headers: {response.headers}")
                 if response.status == 200:
                     content = await response.text()
                     logger.info(f"Response content length: {len(content)}")
