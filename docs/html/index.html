@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot Framework Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #0088cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #0088cc;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #444;
+        }
+        .logo {
+            max-width: 200px;
+            float: right;
+            margin: 0 0 20px 20px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .feature-card h3 {
+            margin-top: 0;
+            color: #0088cc;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .api-table th, .api-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .api-table th {
+            background-color: #f2f2f2;
+        }
+        .api-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #006699;
+        }
+        .workflow-diagram {
+            display: block;
+            margin: 30px auto;
+            max-width: 800px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Telegram Bot Framework</h1>
+        <p>A Comprehensive Framework for Creating Telegram Bots</p>
+    </header>
+
+    <main>
+        <img src="../images/logo.png" alt="Telegram Bot Framework Logo" class="logo">
+        
+        <h2>Overview</h2>
+        <p>
+            The Telegram Bot Framework is a powerful, flexible library for building feature-rich Telegram bots. 
+            It provides an intuitive API, handles Telegram updates efficiently, and offers middleware support 
+            to help developers focus on creating their bot's unique features instead of dealing with the underlying 
+            communication details.
+        </p>
+        
+        <a href="https://github.com/yourusername/telegram-bot-framework" class="btn">View on GitHub</a>
+
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Simple API</h3>
+                <p>Intuitive interface for creating and managing Telegram bots with minimal boilerplate code.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Middleware Support</h3>
+                <p>Create reusable components to process messages, handle authentication, and implement custom logic.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Conversation Handling</h3>
+                <p>Easily manage multi-step conversations and stateful interactions with users.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Media Support</h3>
+                <p>Handle photos, videos, documents, and other media types with built-in utilities.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Error Handling</h3>
+                <p>Robust error handling and recovery mechanisms to keep your bot running smoothly.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Scaling Support</h3>
+                <p>Design principles that allow your bot to scale from prototype to production.</p>
+            </div>
+        </div>
+
+        <h2>How It Works</h2>
+        <img src="../images/workflow.png" alt="Telegram Bot Framework Workflow" class="workflow-diagram">
+        <ol>
+            <li><strong>Setup</strong>: Configure your bot with Telegram API token and event handlers</li>
+            <li><strong>Event Registration</strong>: Define handlers for different types of messages and commands</li>
+            <li><strong>Middleware Configuration</strong>: Add middleware for authentication, logging, etc.</li>
+            <li><strong>Start Bot</strong>: Launch your bot to begin receiving and processing updates</li>
+            <li><strong>Update Handling</strong>: Bot receives updates from Telegram and routes them to appropriate handlers</li>
+            <li><strong>Response Generation</strong>: Handlers generate and send responses back to users</li>
+        </ol>
+
+        <h2>Getting Started</h2>
+        <p>Creating a simple echo bot is just a few lines of code:</p>
+        <pre><code>from telegram_bot_framework import TelegramBot
+
+# Initialize the bot with your token
+bot = TelegramBot("YOUR_TELEGRAM_BOT_TOKEN")
+
+# Register a message handler
+@bot.on_message()
+async def echo(message):
+    """Echo the user message."""
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=f"You said: {message.text}"
+    )
+
+# Start the bot
+if __name__ == "__main__":
+    bot.run()</code></pre>
+
+        <h2>API Reference</h2>
+        <p>The framework provides a comprehensive API for bot development:</p>
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>Class/Method</th>
+                    <th>Description</th>
+                    <th>Parameters</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>TelegramBot(token)</code></td>
+                    <td>Main bot class constructor</td>
+                    <td><code>token: str</code> - Telegram Bot API token</td>
+                </tr>
+                <tr>
+                    <td><code>on_message(filters=None)</code></td>
+                    <td>Decorator to register message handlers</td>
+                    <td><code>filters: dict</code> - Optional filters for message types</td>
+                </tr>
+                <tr>
+                    <td><code>on_command(command)</code></td>
+                    <td>Decorator to register command handlers</td>
+                    <td><code>command: str</code> - Command name without slash</td>
+                </tr>
+                <tr>
+                    <td><code>on_callback_query(data=None)</code></td>
+                    <td>Decorator for inline button callbacks</td>
+                    <td><code>data: str</code> - Optional callback data pattern</td>
+                </tr>
+                <tr>
+                    <td><code>use_middleware(middleware)</code></td>
+                    <td>Add middleware to the processing pipeline</td>
+                    <td><code>middleware: Middleware</code> - Middleware instance</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Installation</h2>
+        <p>Installing the Telegram Bot Framework is simple:</p>
+        <pre><code># Install via pip
+pip install telegram-bot-framework
+
+# Or install from source
+git clone https://github.com/yourusername/telegram-bot-framework.git
+cd telegram-bot-framework
+pip install -e .</code></pre>
+
+        <h2>Advanced Usage</h2>
+        <h3>Creating Conversations</h3>
+        <pre><code>from telegram_bot_framework import TelegramBot, ConversationHandler, State
+
+bot = TelegramBot("YOUR_TOKEN")
+
+# Define conversation states
+NAME_STATE = State("name")
+AGE_STATE = State("age")
+DONE_STATE = State("done")
+
+# Create a conversation handler
+conversation = ConversationHandler(
+    entry_point="/start",
+    states={
+        NAME_STATE: [MessageHandler(ask_name)],
+        AGE_STATE: [MessageHandler(ask_age)],
+        DONE_STATE: [MessageHandler(done)]
+    },
+    fallbacks=[CommandHandler("cancel", cancel)]
+)
+
+# Add the conversation to the bot
+bot.add_handler(conversation)
+
+# Define state handlers
+async def ask_name(update, context):
+    await context.bot.send_message(update.chat.id, "What's your name?")
+    return NAME_STATE
+
+async def ask_age(update, context):
+    name = update.message.text
+    context.user_data["name"] = name
+    await context.bot.send_message(update.chat.id, f"Nice to meet you, {name}! How old are you?")
+    return AGE_STATE
+
+async def done(update, context):
+    age = update.message.text
+    name = context.user_data["name"]
+    await context.bot.send_message(
+        update.chat.id, 
+        f"Thanks! I'll remember that {name} is {age} years old."
+    )
+    return ConversationHandler.END
+
+async def cancel(update, context):
+    await context.bot.send_message(update.chat.id, "Conversation cancelled.")
+    return ConversationHandler.END</code></pre>
+
+        <h3>Using Middleware</h3>
+        <pre><code>from telegram_bot_framework import TelegramBot, Middleware
+
+class AuthMiddleware(Middleware):
+    """Middleware for user authentication."""
+    
+    def __init__(self, allowed_users=None):
+        self.allowed_users = allowed_users or []
+    
+    async def process_update(self, update, next_handler):
+        # Check if user is authorized
+        user_id = update.from_user.id
+        if self.allowed_users and user_id not in self.allowed_users:
+            # Unauthorized user
+            return await update.message.reply_text("Unauthorized user")
+        
+        # User is authorized, continue to next handler
+        return await next_handler(update)
+
+# Using the middleware
+bot = TelegramBot("YOUR_TOKEN")
+bot.use_middleware(AuthMiddleware(allowed_users=[123456789, 987654321]))</code></pre>
+
+        <h2>Documentation</h2>
+        <p>For more detailed documentation, please refer to:</p>
+        <ul>
+            <li><a href="../technical_details.md">Technical Architecture</a></li>
+            <li><a href="../webhook_setup.md">Webhook Setup Guide</a></li>
+            <li><a href="../../CONTRIBUTING.md">Contributing Guidelines</a></li>
+        </ul>
+    </main>
+
+    <footer>
+        <p>Telegram Bot Framework &copy; 2023 | <a href="../../LICENSE">MIT License</a></p>
+    </footer>
+</body>
+</html> 

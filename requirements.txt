@@ -1,14 +1,37 @@
-fastapi==0.115.2
+# Core dependencies
+aiohttp==3.8.5
+pydantic==2.0.3
+python-telegram-bot==20.4
+aiogram==3.0.0
+
+# Persistence
+redis==4.6.0
+aioredis==2.0.1
+sqlalchemy==2.0.19
+alembic==1.11.1
+
+# Web server
 uvicorn==0.22.0
-motor==3.4.0
-requests==2.32.3
-beautifulsoup4==4.10.0
-httpx==0.24.0
-pydantic==2.4.2
-pymongo==4.5
-aiohttp==3.9.1
-apscheduler==3.10.4
-python-multipart==0.0.6
+fastapi==0.101.0
+
+# Utilities
 python-dotenv==1.0.0
-python-telegram-bot==20.3
-brotli==1.0.9
+colorama==0.4.6
+ujson==5.8.0
+pytz==2023.3
+
+# Testing
+pytest==7.4.0
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+aioresponses==0.7.4
+
+# Documentation
+mkdocs==1.5.2
+mkdocs-material==9.1.21
+
+# Development
+black==23.7.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.4.1
